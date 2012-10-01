@@ -28,7 +28,8 @@ Gem::Specification.new do |s|
     "lib/yara-normalize.rb",
     "lib/yara-normalize/yara-normalize.rb",
     "test/helper.rb",
-    "test/test_yara-normalize.rb"
+    "test/test_yara-normalize.rb",
+    "yara-normalize.gemspec"
   ]
   s.homepage = %q{http://github.com/chrislee35/yara-normalize}
   s.licenses = ["MIT"]
