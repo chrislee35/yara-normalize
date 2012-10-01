@@ -17,11 +17,12 @@ Jeweler::Tasks.new do |gem|
   gem.name = "yara-normalize"
   gem.homepage = "http://github.com/chrislee35/yara-normalize"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Normalizes Yara Signatures into a repeatable hash even when non-transforming changes are made}
+  gem.description = %Q{To enable consistent comparisons between yara rules (signature), a uniform hashing standard was needed.}
   gem.email = "rubygems@chrislee.dhs.org"
   gem.authors = ["chrislee35"]
-  # dependencies defined in Gemfile
+	gem.signing_key = "#{File.dirname(__FILE__)}/../gem-private_key.pem"
+	gem.cert_chain  = ["#{File.dirname(__FILE__)}/../gem-public_cert.pem"]
 end
 Jeweler::RubygemsDotOrgTasks.new
 

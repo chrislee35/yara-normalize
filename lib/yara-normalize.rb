@@ -1,0 +1,1 @@
+require 'yara-normalize/yara-normalize'

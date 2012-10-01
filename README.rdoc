@@ -1,6 +1,35 @@
 = yara-normalize
 
-Description goes here.
+Normalizes Yara Signatures into a repeatable hash even when non-transforming changes are made}
+To enable consistent comparisons between yara rules (signature), a uniform hashing standard was needed.
+
+This modules takes just the strings from the strings section, sorts them, then generate a sha1 hash. 
+Then, in the conditions section, reorder the boolean expression to make groups first and then replace all variables
+with $a $b $c, etc.  Then hash the result of this.
+
+Then, the signature ID is the concatenation of the sha1 sum of the sorted strings and the sha1 sum of the normalized conditions.
+
+== Usage
+
+See test cases.
+
+  require 'yara-normalize'
+  sig =<<EOS
+  rule DataConversion__wide : IntegerParsing DataConversion {
+    meta:
+      weight = 1
+    strings:
+      $ = "wtoi" nocase
+      $ = "wtol" nocase
+      $ = "wtof" nocase
+      $ = "wtodb" nocase
+    condition:
+      any of them
+  }
+  EOS
+  yn = Yara::Normalizer.new
+  nrm = yn.normalize(sig)
+  puts nrm.hash_code # => dacfb7f79e2ad96cb66c4784323d91e09e8ad2f8c214c8ea0a52e3a3bda71e6612f02361609e0f7a
 
 == Contributing to yara-normalize
  
