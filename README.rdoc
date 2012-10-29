@@ -16,20 +16,34 @@ See test cases.
   require 'yara-normalize'
   sig =<<EOS
   rule DataConversion__wide : IntegerParsing DataConversion {
-    meta:
-      weight = 1
-    strings:
-      $ = "wtoi" nocase
-      $ = "wtol" nocase
-      $ = "wtof" nocase
-      $ = "wtodb" nocase
-    condition:
+     meta:
+      weight =1
+          strings:
+      $="wtoi" nocase
+          $ ="wtol" nocase
+      $= "wtof" nocase
+       $   =   "wtodb" nocase
+  condition:
       any of them
   }
   EOS
-  yn = Yara::Normalizer.new
-  nrm = yn.normalize(sig)
-  puts nrm.hash_code # => dacfb7f79e2ad96cb66c4784323d91e09e8ad2f8c214c8ea0a52e3a3bda71e6612f02361609e0f7a
+  yn = YaraTools::YaraRule.new(sig)
+  puts yn.hash # => yn01:488085c947cb22ed:d936fceffe
+  puts yn.normalize # => 
+    rule DataConversion__wide : IntegerParsing DataConversion {
+      meta:
+        weight = 1
+      strings:
+        $ = "wtoi" nocase
+        $ = "wtol" nocase
+        $ = "wtof" nocase
+        $ = "wtodb" nocase
+      condition:
+        any of them
+    }
+  puts yn.name # => DataConversion__wide
+  pp yn.tags # => ["IntegerParsing","DataConversion"]
+  
 
 == Contributing to yara-normalize
  
