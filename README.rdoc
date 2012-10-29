@@ -7,7 +7,7 @@ This modules takes just the strings from the strings section, sorts them, then g
 Then, in the conditions section, reorder the boolean expression to make groups first and then replace all variables
 with $a $b $c, etc.  Then hash the result of this.
 
-Then, the signature ID is the concatenation of the sha1 sum of the sorted strings and the sha1 sum of the normalized conditions.
+Then, the signature ID is the concatenation of the truncated md5 sum of the sorted strings and the truncated md5 sum of the normalized conditions. E.g., yn01:488085c947cb22ed:d936fceffe.
 
 == Usage
 
