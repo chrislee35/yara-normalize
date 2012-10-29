@@ -5,14 +5,16 @@
 
 Gem::Specification.new do |s|
   s.name = %q{yara-normalize}
-  s.version = "0.0.0"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["chrislee35"]
   s.cert_chain = ["/Users/chris/Documents/projects/rubygems/yara-normalize/../gem-public_cert.pem"]
-  s.date = %q{2012-09-30}
+  s.date = %q{2012-10-29}
+  s.default_executable = %q{yaratool}
   s.description = %q{To enable consistent comparisons between yara rules (signature), a uniform hashing standard was needed.}
   s.email = %q{rubygems@chrislee.dhs.org}
+  s.executables = ["yaratool"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
@@ -25,8 +27,10 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "bin/yaratool",
     "lib/yara-normalize.rb",
     "lib/yara-normalize/yara-normalize.rb",
+    "ruby_results.txt",
     "test/helper.rb",
     "test/test_yara-normalize.rb",
     "yara-normalize.gemspec"
