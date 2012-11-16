@@ -8,7 +8,7 @@ module YaraTools
 			ruletext = ruletext.gsub(/[\r\n]+/,"\n").gsub(/^\s*\/\/.*$/,'')
 			@original = ruletext
 			@lookup_table = {}
-			@next_replacement = 'a'
+			@next_replacement = 0
 			
 			if ruletext =~ /rule\s+([\w\_\-]+)(\s*:\s*(\w[\w\s]+\w))?\s*\{\s*(meta:\s*(.*?))?strings:\s*(.*?)\s*condition:\s*(.*?)\s*\}/m
 				name,_,tags,ifmeta,meta,strings,condition = $~.captures
@@ -51,8 +51,8 @@ module YaraTools
 			condition.gsub(/[\$\#]\w+/) do |x|
 				key = x[1,1000]
 				if not @lookup_table[key]
-					@lookup_table[key] = @next_replacement
-					@next_replacement = (@next_replacement[0] + 1).chr
+					@lookup_table[key] = @next_replacement.to_s
+					@next_replacement += 1
 				end
 				x[0].chr+@lookup_table[key]
 			end
