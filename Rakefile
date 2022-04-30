@@ -29,7 +29,6 @@ Jeweler::RubygemsDotOrgTasks.new
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'test'
-  puts test.libs
   test.pattern = FileList['test/test*.rb']
   test.verbose = true
 end
