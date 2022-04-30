@@ -21,24 +21,17 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{To enable consistent comparisons between yara rules (signature), a uniform hashing standard was needed.}
   gem.email = "rubygems@chrislee.dhs.org"
   gem.authors = ["chrislee35"]
-	gem.signing_key = "#{File.dirname(__FILE__)}/../gem-private_key.pem"
-	gem.cert_chain  = ["#{File.dirname(__FILE__)}/../gem-public_cert.pem"]
+  #gem.signing_key = "#{File.dirname(__FILE__)}/../gem-private_key.pem"
+  #gem.cert_chain  = ["#{File.dirname(__FILE__)}/../gem-public_cert.pem"]
 end
 Jeweler::RubygemsDotOrgTasks.new
 
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-end
-
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |test|
   test.libs << 'test'
-  test.pattern = 'test/**/test_*.rb'
+  puts test.libs
+  test.pattern = FileList['test/test*.rb']
   test.verbose = true
-  test.rcov_opts << '--exclude "gems/*"'
 end
 
 task :default => :test

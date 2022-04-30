@@ -10,8 +10,8 @@ module YaraTools
 			@lookup_table = {}
 			@next_replacement = 0
 			
-			if ruletext =~ /rule\s+([\w\_\-]+)(\s*:\s*(\w[\w\s]+\w))?\s*\{\s*(meta:\s*(.*?))?strings:\s*(.*?)\s*condition:\s*(.*?)\s*\}/m
-				name,_,tags,ifmeta,meta,strings,condition = $~.captures
+			if ruletext =~ /rule\s+([\w\-]+)(\s*:\s*(\w[\w\s]+\w))?\s*\{\s*(meta:\s*(.*?))?strings:\s*(.*?)\s*condition:\s*(.*?)\s*\}/m
+				name,_,tags,_,meta,strings,condition = $~.captures
 				@name = name
 				@tags = tags.strip.split(/[,\s]+/) if tags
 				@meta = {}
@@ -33,7 +33,7 @@ module YaraTools
 						hexstr = $1.gsub(/\s+/,'').downcase.scan(/../).join(" ")
 						s = s.gsub(/= \{([0-9a-fA-F\s]+)\}/, "= { #{hexstr} }")
 					end
-					key, val = s.split(/ = /,2)
+					_, val = s.split(/ = /,2)
 					if val
 						@normalized_strings << val
 					else
@@ -100,7 +100,7 @@ module YaraTools
 	
 	class Splitter
 		def Splitter.split(ruleset)
-			rules = ruleset.gsub(/[\r\n]+/,"\n").gsub(/^\s*\/\/.*$/,'').scan(/(rule\s+([\w\_\-]+)(\s*:\s*(\w[\w\s]+\w))?\s*\{\s*(meta:\s*(.*?))?strings:\s*(.*?)\s*condition:\s*(.*?)\s*\})/m).map do |rule|
+			ruleset.gsub(/[\r\n]+/,"\n").gsub(/^\s*\/\/.*$/,'').scan(/(rule\s+([\w\-]+)(\s*:\s*(\w[\w\s]+\w))?\s*\{\s*(meta:\s*(.*?))?strings:\s*(.*?)\s*condition:\s*(.*?)\s*\})/m).map do |rule|
 				YaraRule.new(rule[0])
 			end
 		end
