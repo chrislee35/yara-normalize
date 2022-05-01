@@ -2,22 +2,18 @@
 require 'rubygems'
 require 'yara-normalize'
 
-if __FILE__ == $0
-	count = duplicates = 0
-	hashes = {}
-	ARGV.each do |file|
-		buf = open(file).read
-		YaraTools::Splitter.split(buf).each do |rule|
-			count += 1
-			#puts rule.normalize
-			hash = rule.hash
-			puts "#{rule.name} #{hash} #{rule.normalized_strings.join("%")}"
-			if hashes[hash]
-				duplicate += 1
-			end
-			hashes[hash] = rule
-		end
-	end
-	puts "Count: #{count}, Duplicates: #{duplicates}"
+count = duplicates = 0
+hashes = {}
+ARGV.each do |file|
+  buf = open(file).read
+  YaraTools::Splitter.split(buf).each do |rule|
+    count += 1
+    hash = rule.hash
+    puts "#{rule.name} #{hash} #{rule.normalized_strings.join("%")}"
+    if hashes[hash]
+      duplicates += 1
+    end
+    hashes[hash] = rule
+  end
 end
-		
+puts "Count: #{count}, Duplicates: #{duplicates}"

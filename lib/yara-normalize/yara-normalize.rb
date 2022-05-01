@@ -11,16 +11,18 @@ module YaraTools
 			@next_replacement = 0
 			
 			if ruletext =~ /rule\s+([\w\-]+)(\s*:\s*(\w[\w\s]+\w))?\s*\{\s*(meta:\s*(.*?))?strings:\s*(.*?)\s*condition:\s*(.*?)\s*\}/m
-				name,_,tags,_,meta,strings,condition = $~.captures
+                name,_,tags,_,meta,strings,condition = $~.captures
 				@name = name
 				@tags = tags.strip.split(/[,\s]+/) if tags
 				@meta = {}
-				meta.split(/\n/).each do |m|
-					k,v = m.strip.split(/\s*=\s*/,2)
-					if v
-						@meta[k] = v
-					end
-				end
+                if meta
+                    meta.split(/\n/).each do |m|
+                        k,v = m.strip.split(/\s*=\s*/,2)
+                        if v
+                            @meta[k] = v
+                        end
+                    end
+                end
 				@normalized_strings = []
 				@strings = strings.split(/\n/).map do |s|
 					# strip off the spaces from the edges and then replace the first = with ' = '.
