@@ -11,8 +11,8 @@ rescue Bundler::BundlerError => e
 end
 require 'rake'
 
-require 'jeweler'
-Jeweler::Tasks.new do |gem|
+require 'juwelier'
+Juwelier::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "yara-normalize"
   gem.homepage = "http://github.com/chrislee35/yara-normalize"
@@ -24,7 +24,7 @@ Jeweler::Tasks.new do |gem|
   #gem.signing_key = "#{File.dirname(__FILE__)}/../gem-private_key.pem"
   #gem.cert_chain  = ["#{File.dirname(__FILE__)}/../gem-public_cert.pem"]
 end
-Jeweler::RubygemsDotOrgTasks.new
+Juwelier::RubygemsDotOrgTasks.new
 
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
