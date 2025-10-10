@@ -6,9 +6,8 @@ source "http://rubygems.org"
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 group :development do
-  gem "shoulda", ">= 4"
-  gem "rdoc", "~> 6.4"
-  gem "bundler", "~> 2.3"
-  gem "juwelier", ">= 2.4"
-  gem "test-unit", "~> 3.5.3"
+  gem "shoulda", "~> 4"
+  gem "rdoc", "~> 6.6"
+  gem "bundler", "~> 2.7"
+  gem "test-unit", "~> 3.6"
 end

@@ -11,20 +11,6 @@ rescue Bundler::BundlerError => e
 end
 require 'rake'
 
-require 'juwelier'
-Juwelier::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "yara-normalize"
-  gem.homepage = "http://github.com/chrislee35/yara-normalize"
-  gem.license = "MIT"
-  gem.summary = %Q{Normalizes Yara Signatures into a repeatable hash even when non-transforming changes are made}
-  gem.description = %Q{To enable consistent comparisons between yara rules (signature), a uniform hashing standard was needed.}
-  gem.email = "rubygems@chrislee.dhs.org"
-  gem.authors = ["chrislee35"]
-  #gem.signing_key = "#{File.dirname(__FILE__)}/../gem-private_key.pem"
-  #gem.cert_chain  = ["#{File.dirname(__FILE__)}/../gem-public_cert.pem"]
-end
-Juwelier::RubygemsDotOrgTasks.new
 
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
