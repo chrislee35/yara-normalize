@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
-# stub: yara-normalize 0.4.0 ruby lib
+# stub: yara-normalize 1.0.0 ruby lib
 
 # yara-normalize.gemspec
 Gem::Specification.new do |s|
   s.name                  = "yara-normalize"
-  s.version               = "0.4.0"
+  s.version               = "1.0.0"
   s.authors               = ["Chris Lee"]
   s.email                 = ["rubygems@chrislee.dhs.org"]
 

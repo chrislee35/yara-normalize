@@ -1,35 +1,34 @@
 = yara-normalize
 
-Normalizes Yara Signatures into a repeatable hash even when non-transforming changes are made}
-To enable consistent comparisons between yara rules (signature), a uniform hashing standard was needed.
+Normalizes YARA signatures into a repeatable, stable hash even when
+non-semantic changes are made (whitespace, comments, tag ordering, variable
+renaming, etc.).
 
-This modules takes just the strings from the strings section, sorts them, then generate a sha1 hash. 
-Then, in the conditions section, reorder the boolean expression to make groups first and then replace all variables
-with $a $b $c, etc.  Then hash the result of this.
+To enable consistent comparisons between YARA rules, a uniform fingerprinting
+standard is applied:
 
-Then, the signature ID is the concatenation of the truncated md5 sum of the sorted strings and the truncated md5 sum of the normalized conditions. E.g., yn01:488085c947cb22ed:d936fceffe.
+1. *Strings section* — each string value (the part after the '=') is extracted,
+   sorted alphabetically, and the sorted list is hashed with SHA-256.  Variable
+   names ($a, $mshtmlExec_1, …) are excluded from the hash so that renaming
+   does not change the fingerprint.
+
+2. *Condition section* — variable references ($name, #name) are replaced with
+   positional tokens ($0, $1, …) in order of first appearance, so cosmetic
+   renames do not affect the hash.  The resulting text is hashed with SHA-256.
+
+The rule fingerprint is:
+
+  yn<VERSION>:<last-16-hex-chars-of-strings-SHA256>:<last-10-hex-chars-of-condition-SHA256>
+
+Prior to version 0.4.0 the fingerprint used MD5 and carried the prefix +yn01+.
+Since 0.4.0 the fingerprint uses SHA-256 and carries the prefix +yn02+.  The
+two identifier series are not interchangeable.
 
 == Usage
 
-See test cases.
-
   require 'yara-normalize'
-  sig =<<EOS
-  rule DataConversion__wide : IntegerParsing DataConversion {
-     meta:
-      weight =1
-          strings:
-      $="wtoi" nocase
-          $ ="wtol" nocase
-      $= "wtof" nocase
-       $   =   "wtodb" nocase
-  condition:
-      any of them
-  }
-  EOS
-  yn = YaraTools::YaraRule.new(sig)
-  puts yn.hash # => yn01:488085c947cb22ed:d936fceffe
-  puts yn.normalize # => 
+
+  sig = <<~EOS
     rule DataConversion__wide : IntegerParsing DataConversion {
       meta:
         weight = 1
@@ -41,22 +40,57 @@ See test cases.
       condition:
         any of them
     }
-  puts yn.name # => DataConversion__wide
-  pp yn.tags # => ["IntegerParsing","DataConversion"]
-  
+  EOS
+
+  yn = YaraTools::YaraRule.new(sig)
+
+  puts yn.hash
+  # => yn02:6783b7082bed88dc:6821e3f6a3
+
+  puts yn.name    # => DataConversion__wide
+  pp   yn.tags    # => ["IntegerParsing", "DataConversion"]
+  pp   yn.meta    # => {"weight"=>"1"}
+  pp   yn.strings # => ["$ = \"wtoi\" nocase", ...]
+
+  puts yn.normalize
+  # => rule DataConversion__wide : IntegerParsing DataConversion {
+  #      meta:
+  #        weight = 1
+  #      strings:
+  #        $ = "wtoi" nocase
+  #        $ = "wtol" nocase
+  #        $ = "wtof" nocase
+  #        $ = "wtodb" nocase
+  #      condition:
+  #        any of them
+  #    }
+
+Splitting a multi-rule file:
+
+  rules = YaraTools::Splitter.split(File.read("ruleset.yar"))
+  rules.each { |r| puts "#{r.name}: #{r.hash}" }
+
+== Security notes
+
+* Fingerprints use SHA-256 (as of yn02).  MD5-based yn01 hashes should be
+  considered legacy and re-computed.
+* +YaraRule#hash+ overrides Ruby's +Object#hash+.  Do *not* use +YaraRule+
+  objects as Hash keys; the method returns a String fingerprint, not the
+  Integer that Ruby's Hash tables require.
 
 == Contributing to yara-normalize
- 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
+
+* Check out the latest master to make sure the feature hasn't been implemented
+  or the bug hasn't been fixed yet.
+* Check out the issue tracker to make sure someone already hasn't requested it
+  and/or contributed it.
 * Fork the project.
 * Start a feature/bugfix branch.
 * Commit and push until you are happy with your contribution.
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+* Make sure to add tests for it. This is important so I don't break it in a
+  future version unintentionally.
+* Please try not to mess with the Rakefile, version, or history.
 
 == Copyright
 
-Copyright (c) 2012 chrislee35. See LICENSE.txt for
-further details.
-
+Copyright (c) 2012 chrislee35. See LICENSE.txt for further details.

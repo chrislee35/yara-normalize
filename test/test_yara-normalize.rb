@@ -28,7 +28,7 @@ rule newIE0daymshtmlExec
 EOS
 		puts sig
 		yn = YaraTools::YaraRule.new(sig)
-		assert_equal("yn01:66dd624d64a79f17:ecf1725295", yn.hash)
+		assert_equal("yn02:8d8883df1591735c:473fbe1473", yn.hash)
 		assert_equal("newIE0daymshtmlExec", yn.name)
 		assert_equal("\"redacted @ gmail.com\"", yn.meta['author'])
 		assert_equal(["$mshtmlExec_1 = /document.execCommand(['\"]selectAll['\"])/ nocase fullword",
@@ -99,7 +99,7 @@ rule DataConversion__wide : IntegerParsing DataConversion {
 }
 EOS
 		yn = YaraTools::YaraRule.new(sig)
-		assert_equal("yn01:a5fd8576f2da34e2:d936fceffe", yn.hash)
+		assert_equal("yn02:6783b7082bed88dc:6821e3f6a3", yn.hash)
 		assert_equal("1", yn.meta['weight'])
 		assert_equal("DataConversion__wide", yn.name)
 		assert_equal(["IntegerParsing", "DataConversion"], yn.tags)
